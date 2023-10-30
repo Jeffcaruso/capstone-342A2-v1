@@ -19,10 +19,14 @@ ostream &operator<<(ostream &out, const LargeNum &num)
 // constructors
 LargeNum::LargeNum(const string &str)
 {
+    //intentionally wrong def
+    Num = "1";
 }
 
 LargeNum::LargeNum(int anInteger)
 {
+    //intentionally wrong def
+    Num = "1";
 }
 
 // Large Num Functions
@@ -34,8 +38,9 @@ bool LargeNum::isZero() const
 
 LargeNum &LargeNum::negate()
 {
-    // TODO: insert return statement here
-    return;
+    //intentionally wrong def
+    LargeNum ln = LargeNum(1);
+    return ln;
 }
 
 // overloaded # manipulation operators
@@ -109,25 +114,31 @@ bool LargeNum::operator>=(const LargeNum &rhs) const
 //  prefix increment
 LargeNum &LargeNum::operator++()
 {
-    // TODO: insert return statement here
-    return;
+    //intentionally wrong def
+    LargeNum ln = LargeNum(1);
+    return ln;
 }
 
 // postfix increment
 LargeNum LargeNum::operator++(int)
 {
-    return LargeNum();
+    //intentionally wrong def
+    LargeNum ln = LargeNum(1);
+    return ln;
 }
 
 // prefix decrement
 LargeNum &LargeNum::operator--()
 {
-    // TODO: insert return statement here
-    return;
+    //intentionally wrong def
+    LargeNum ln = LargeNum(1);
+    return ln;
 }
 
 // postfix decrement
 LargeNum LargeNum::operator--(int)
 {
-    return LargeNum();
+    //intentionally wrong def
+    LargeNum ln = LargeNum(1);
+    return ln;
 }

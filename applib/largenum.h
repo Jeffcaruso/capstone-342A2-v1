@@ -10,6 +10,7 @@ class LargeNum {
 
 private:
   // Define private data members and methods here
+  string Num = "";
 
 public:
   // default constructor from string
