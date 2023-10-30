@@ -3,13 +3,8 @@
 ## Jeffrey Caruso Fall 2023
 
 ## reference:
- - https://github.com/pisan342/ass1-pokedex-starter
+ - https://github.com/pisan342/ass2-largenum-starter
 
-## Complete
-- Google Test
-- Valgrind
-- Building with g++ and a non gTest main.cpp file
-
-## May need some fixes
- - Clangtidy
-It seems to be detecting at least some faults, may not have exact correct configuration yet.
+## Current stats
+ - Need to do all tasks for this repo still
+ - currently, next items is setup for 6 tests + the large num class...

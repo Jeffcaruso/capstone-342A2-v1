@@ -4,7 +4,7 @@ cc_library(
   name = "APPLib",
   visibility = ["//visibility:public"],
   hdrs = glob(["**/*.h"]),
-  srcs = glob(["pokedex.cpp"]),  # can add other files if needed. But don't want building.cpp! *See description*
+  srcs = glob(["largenum.cpp"]),  # can add other files if needed. But don't want building.cpp! *See description*
 )
 
 # Description

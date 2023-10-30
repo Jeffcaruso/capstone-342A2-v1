@@ -1,8 +1,7 @@
-#include "applib/pokedex.h" 
+#include "applib/largenum.h" 
 
 int main()
 {
-    Pokedex poke = Pokedex();
-    poke.insert("Lolazord");
+    LargeNum LN = LargeNum(12345678);
     return 0;
 }
