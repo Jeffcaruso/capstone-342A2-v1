@@ -19,7 +19,7 @@ jobs:
             make &&
             sudo make install
     - name: Install Bazel
-      run:  sudo apt install nodejs 
+      run:  sudo apt install nodejs; 
             sudo npm install -g @bazel/bazelisk
       #old install bazel run...
       # sudo apt install nodejs &&
