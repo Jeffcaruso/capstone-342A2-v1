@@ -18,13 +18,13 @@ public:
   // constructor from int
   explicit LargeNum(int anInteger);
 
-  // use the default copy constructor
+  // use the default copy constructor (so no need for it in .cpp file)
   LargeNum(const LargeNum &other) = default;
 
-  // use the default copy assignment operator
+  // use the default copy assignment operator (so no need for it in .cpp file)
   LargeNum &operator=(const LargeNum &other) = default;
 
-  // use the default destructor
+  // use the default destructor (so no need for it in .cpp file)
   ~LargeNum() = default;
 
   // returns true if the number is zero

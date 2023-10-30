@@ -7,7 +7,7 @@
 //============================================================================
 
 #include <gtest/gtest.h>
-#include "applib/pokedex.h"
+#include "applib/largenum.h"
 
 using namespace std;
 
