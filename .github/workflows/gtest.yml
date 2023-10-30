@@ -151,7 +151,7 @@ jobs:
     - uses: actions/checkout@v1
     - name: Run Test
       run:  bazel test --cxxopt=-std=c++14 --verbose_failures --run_under='/usr/bin/valgrind --leak-check=full --errors-for-leak-kinds=definite --error-exitcode=3' --test_output=all //Tests:APP_test_5
-Run_Test_6:
+  Run_Test_6:
     needs: build
     runs-on: ubuntu-latest
     steps:
