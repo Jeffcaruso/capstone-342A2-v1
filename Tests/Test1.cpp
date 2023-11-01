@@ -9,41 +9,52 @@
 #include <gtest/gtest.h>
 #include "applib/largenum.h"
 
+#include <iostream>
+#include <sstream>
+
 using namespace std;
 
-TEST(Test1, CheckSize4Empty)
+TEST(Test1, CheckPrintingAndAddition)
 {
-	cout << "trivial test for now..." << endl;
+	stringstream strs;
 
-	// //Make Pokedex class pdx
-	// Pokedex pdx;
+	LargeNum num0("1234567890123456789");
+	strs << num0;
+	string ans0Str = "1,234,567,890,123,456,789";
+	EXPECT_EQ(strs.str(), ans0Str);
+	
+	strs.str("");
+	LargeNum num1(12345);
+	strs << num1;
+	string ans1Str = "12,345";
+	EXPECT_EQ(strs.str(), ans1Str);
 
-	// //check it starts with size 0 as expected
-	// EXPECT_EQ(pdx.size(), 0);
+	strs.str("");
+	LargeNum num2(11115);
+	LargeNum num3 = num1 + num2;
+	strs << num3;
+	string ans2Str = "23,460";
+	EXPECT_EQ(strs.str(), ans2Str);
+
+	strs.str("");
+	LargeNum num4(99);
+	LargeNum num5 = num1 + num4;
+	strs << num5;
+	string ans3Str = "12,444";
+	EXPECT_EQ(strs.str(), ans3Str);
+
+	strs.str("");
+	LargeNum num6(99000);
+	LargeNum num7 = num1 + num6;
+	strs << num7;
+	string ans4Str = "111,345";
+	EXPECT_EQ(strs.str(), ans4Str);
+
+	strs.str("");
+	LargeNum num8 = num0 + num1;
+	strs << num8;
+	string ans5Str = "1,234,567,890,123,469,134";
+	EXPECT_EQ(strs.str(), ans5Str);
 }
 
-TEST(Test1, CheckEmpty4Empty)
-{
-	cout << "trivial test for now..." << endl;
-
-	// //Make Pokedex class pdx
-	// Pokedex pdx;
-
-	// //Check empty method. expecting it to be empty
-	// EXPECT_EQ(pdx.empty(), 0);
-}
-
-TEST(Test1, CheckOutStr4Empty)
-{	
-	cout << "trivial test for now..." << endl;
-	// //Make Pokedex class pdx
-	// Pokedex pdx;
-
-	// //check output is an empty set "[]" as expected
-	// ostringstream outStrStr;
-	// outStrStr << pdx;
-	// //for comparisons, make the c strings to a std::string, 
-	// 	// since Pokedex is storing as std::string.
-	// string emptySet = "[]";
-	// EXPECT_EQ(outStrStr.str(), emptySet);
-}
+//This cannot be easily split without changing the actual tests becuase they depend on each number...
