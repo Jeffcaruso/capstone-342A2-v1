@@ -1,6 +1,6 @@
 //============================================================================
 // Name        : Test2
-// Test Desc.  : Test that add work properly for 1 item
+// Test Desc.  : Test EQ, NE, GT, GTE, LT, LTE comparisons
 //				 	(coverage for old test 2 method)
 // Author      : Jeffrey Caruso
 // Date    	   : Fall 2023
@@ -9,6 +9,9 @@
 #include <gtest/gtest.h>
 #include "applib/largenum.h"
 
+#include <iostream>
+#include <sstream>
+
 using namespace std;
 
 //note / reminder:
@@ -16,42 +19,45 @@ using namespace std;
 // for c strings, use EXPECT_STREQ (or STRNE)
 // http://google.github.io/googletest/reference/assertions.html
 
-TEST(Test2, Add1Pokemon)
+TEST(Test2one, CheckEqualAndNE)
 {
-	cout << "trivial test for now..." << endl;
-	// //Make Pokedex class pdx
-	// Pokedex pdx;
-
-	// //string stream for output testing
-	// stringstream strs;
-
-	// pdx.insert("Pikachu");
-
-	// //check its size 1 as expected after 1 add
-	// //yield better error output to user with making it clear 1 is expected result
-	// int expectedResult1 = 1;
-	// EXPECT_EQ(pdx.size(), expectedResult1);
-
-	// //expecting pdx to not be empty after 1 add
-	// EXPECT_FALSE(pdx.empty());
-
-	// //expect Pikachu to be at index 0 after adding it
-	// //have comparison be against a std string
-	// string Pika = "Pikachu";
-	// EXPECT_EQ(pdx.at(0), Pika);
-
-	// //expect with only 1 item for front to equal back
-	// EXPECT_EQ(pdx.front(), pdx.back());
-
-	// //init str stream
-	// strs.str("");
-	// //test output operator
-	// strs << pdx;
-	// //have comparison be against a std string
-	// string PikaSet = "[Pikachu]";
-	// //check the output operator was correct
-	// EXPECT_EQ(strs.str(), PikaSet);
+	//Testing Equal and Not Equal with operator overloads
+	//is true that 99 == 99
+	EXPECT_TRUE(LargeNum(99) == LargeNum(99));
+	//is true that 99 != 100
+	EXPECT_TRUE(LargeNum(99) != LargeNum(100));  	
 }
 
-//this test has no reason to be split into multiple sections to feasibly provide 
-	//more info to user by splitting this into multiple subtests
+TEST(TEST2two, CheckGTEandLTE)
+{
+	//Testing Greater Than or Equal and Less Than or Equal with operator overloads	
+	//is true that 105 >= 100
+	EXPECT_TRUE(LargeNum(105) >= LargeNum(100));
+	//is true that 100 <= 105
+	EXPECT_TRUE(LargeNum(100) <= LargeNum(105));
+}
+
+TEST(Test2three, CheckGTandLT)
+{
+	//Testing Greater Than and Less Than with operator overloads	
+
+	//is true that 99 > 7
+	EXPECT_TRUE(LargeNum(99) > LargeNum(7));
+	//is true that 7 < 99
+	EXPECT_TRUE(LargeNum(7) < LargeNum(99));
+
+	//is true that 99 > -7
+	EXPECT_TRUE(LargeNum(99) > LargeNum(-7));
+	//is true that -7 < 99
+	EXPECT_TRUE(LargeNum(-7) < LargeNum(99));
+
+	//is true that -5 > -10
+	EXPECT_TRUE(LargeNum(-5) > LargeNum(-10));
+	//is true that -10 < -5
+	EXPECT_TRUE(LargeNum(-10) < LargeNum(-5));
+
+	//is true that (5 > 5 is incorrect)
+	EXPECT_TRUE( ! (LargeNum(5) > LargeNum(5)));
+}
+
+// These tests were feasibly split by category, so students can know and test their inequality operators by type.

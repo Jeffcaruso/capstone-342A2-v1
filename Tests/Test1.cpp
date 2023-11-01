@@ -1,7 +1,7 @@
 //============================================================================
 // Name        : Test1
-// Test Desc.  : Test that the methods to determine empty are correct
-//				 	(coverage for old test 1 method) the 'student' code
+// Test Desc.  : Test that Printing and addition operates as expected
+//				 	(coverage for old test 1 method)
 // Author      : Jeffrey Caruso
 // Date    	   : Fall 2023
 //============================================================================
