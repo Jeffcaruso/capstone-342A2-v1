@@ -1,5 +1,5 @@
 //============================================================================
-// Name        : Test2
+// Name        : Test3
 // Test Desc.  : Test to check negative #'s
 //				 	(coverage for old test 3 method)
 // Author      : Jeffrey Caruso

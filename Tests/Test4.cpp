@@ -1,6 +1,6 @@
 //============================================================================
-// Name        : Test2
-// Test Desc.  : Test that add + remove work properly for 3 items
+// Name        : Test4
+// Test Desc.  : Test multiplication
 //				 	(coverage for old test 4 method)
 // Author      : Jeffrey Caruso
 // Date    	   : Fall 2023
@@ -9,43 +9,26 @@
 #include <gtest/gtest.h>
 #include "applib/largenum.h"
 
+#include <iostream>
+#include <sstream>
+
 using namespace std;
 
-TEST(Test4, LifecycleFor3PokemonEntries)
+TEST(Test4, MultiplicationTesting)
 {
-	cout << "trivial test for now..." << endl;
+	// is true that 25 * 0 = 0
+	EXPECT_TRUE(LargeNum(25) * LargeNum(0) == LargeNum(0));
 
+	// is true that 25 * 5 = 125
+	EXPECT_TRUE(LargeNum(25) * LargeNum(5) == LargeNum(125));
 
-	// //Make Pokedex class pdx
-	// Pokedex pdx;
+	//is true that (-25) * (-5) = 125
+	EXPECT_TRUE(LargeNum(-25) * LargeNum(-5) == LargeNum(125));
 
-	// //string stream for output testing
-	// stringstream strs;
+	// is true that (-25) * (5) = -125
+	EXPECT_TRUE(LargeNum(-25) * LargeNum(5) == LargeNum(-125));
 
-	// //insert 3 Pokemon out of alpha order, class should alpha sort.
-	// pdx.insert("Charmander");
-	// pdx.insert("Pikachu");
-	// pdx.insert("Bulbasaur");
-
-	// //init strs
-	// strs.str("");
-	// //test output
-	// strs << pdx;
-
-	// //test things were added correctly and output correctly (largely testing alpha sort)
-	// string expectedResult1 = "[Bulbasaur, Charmander, Pikachu]";
-	// EXPECT_EQ(strs.str(), expectedResult1);
-
-	// //erase center
-	// pdx.erase(1);
-
-	// //reset strs
-	// strs.str("");
-
-	// //test output
-	// strs << pdx;
-
-	// string expectedResult2 = "[Bulbasaur, Pikachu]";
-	// EXPECT_EQ(strs.str(), expectedResult2);
+	// is true that 25 * (-5) = -125
+	EXPECT_TRUE(LargeNum(25) * LargeNum(-5) == LargeNum(-125));
 }
 
