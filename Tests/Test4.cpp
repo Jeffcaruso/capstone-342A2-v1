@@ -31,4 +31,3 @@ TEST(Test4, MultiplicationTesting)
 	// is true that 25 * (-5) = -125
 	EXPECT_TRUE(LargeNum(25) * LargeNum(-5) == LargeNum(-125));
 }
-

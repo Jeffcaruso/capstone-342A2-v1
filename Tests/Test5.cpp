@@ -39,5 +39,3 @@ TEST(Test5, Division)
 	//is true that 7 / 25 = 0. (when using integer math)
 	EXPECT_TRUE(LargeNum("7") / LargeNum("25") == LargeNum("0"));
 }
-
-

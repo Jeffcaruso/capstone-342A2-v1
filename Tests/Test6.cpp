@@ -1,6 +1,6 @@
 //============================================================================
-// Name        : Test2
-// Test Desc.  : Testing student access input Sanitization
+// Name        : Test6
+// Test Desc.  : Testing Prefix + Postfix operations
 //				 	(coverage for old test 5 method)
 // Author      : Jeffrey Caruso
 // Date    	   : Fall 2023
@@ -68,4 +68,3 @@ TEST(Test6two, CheckPrefixIntoAndOutOfNegative)
 	// is true that (++(-1)) = 0
 	EXPECT_TRUE(++num1 == LargeNum(0));
 }
-
