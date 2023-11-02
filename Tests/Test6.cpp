@@ -9,46 +9,63 @@
 #include <gtest/gtest.h>
 #include "applib/largenum.h"
 
+#include <iostream>
+#include <sstream>
+
 using namespace std;
 
-TEST(Test6, CheckAccessInputSanitizationInPokedex)
+
+TEST(Test6one, CheckPrefixAndPostfix)
 {
-	cout << "trivial test for now..." << endl;
-	// //Make Pokedex class pdx
-	// Pokedex pdx;
+	LargeNum num0(10);
 
-	// // expect error message from Pokedex class
-	// pdx.front();
-	// pdx.back();
-	// pdx.at(3);
-	// pdx.at(-9);
-	// pdx.erase(5);
-	// pdx.erase(-10);
-	// pdx.pop_back();
+	// is true that (10++) = 10
+	EXPECT_TRUE(num0++ == LargeNum(10));
+	
+	// is true that 11 = 11
+	EXPECT_TRUE(num0 == LargeNum(11));
 
-	// //yield better error output to user with making it clear 0 is expected result
-	// int expectedSize = 0;
-	// //verify expected result of 0
-	// EXPECT_EQ(pdx.size(), expectedSize);
+	// is true that (--11) = 10
+	EXPECT_TRUE(--num0 == LargeNum(10));
 
-	// //should actually work
-	// pdx.insert("Charmander");
-	// // expect error message from Pokedex class
-	// pdx.at(6);
-	// pdx.erase(2);
+	// is true that (10--) = 10
+	EXPECT_TRUE(num0-- == LargeNum(10));
 
-	// //yield better error output to user with making it clear 1 is expected result
-	// int expectedSize1 = 1;
-	// //verify expected result of 1
-	// EXPECT_EQ(pdx.size(), expectedSize1);
+	// is true that 9 = 9
+	EXPECT_TRUE(num0 == LargeNum(9));
 
-	// //actually erase the start of the list (Charmander)
-	// pdx.erase(0);
+	// is true that (++9) = 10
+	EXPECT_TRUE(++num0 == LargeNum(10));
 
-	// //yield better error output to user with making it clear 0 is expected result
-	// int expectedSize2 = 0;
-	// //verify expected result of 0
-	// EXPECT_EQ(pdx.size(), expectedSize2);
+	// is true that (10--) = 10
+	EXPECT_TRUE(num0-- == LargeNum(10));
+
+	// is true that 9 = 9
+	EXPECT_TRUE(num0 == LargeNum(9));
+
+	// testing with a negative (and staying negative)
+	num0.negate();
+
+	// is true that (++(-9)) = -8
+	EXPECT_TRUE(++num0 == LargeNum(-8));
+
+	// is true that (--(-8)) = -9
+	EXPECT_TRUE(--num0 == LargeNum(-9));
+
 }
 
+TEST(Test6two, CheckPrefixIntoAndOutOfNegative)
+{
+	//specifically prefix making # negative
+	LargeNum num1(1);
+
+	// is true that (--1) = 0
+	EXPECT_TRUE(--num1 == LargeNum(0));
+
+	// is true that (--0) = 0
+	EXPECT_TRUE(--num1 == LargeNum(-1));
+
+	// is true that (++(-1)) = 0
+	EXPECT_TRUE(++num1 == LargeNum(0));
+}
 
