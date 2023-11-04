@@ -9,10 +9,8 @@ class LargeNum {
   friend ostream &operator<<(ostream &out, const LargeNum &num);
 
 private:
-  // vector of digits as ints
-  vector<int> digits;
-
-  bool isPositive = true;
+  // Define private data members and methods here
+  string Num = "";
 
 public:
   // default constructor from string
@@ -21,13 +19,13 @@ public:
   // constructor from int
   explicit LargeNum(int anInteger);
 
-  // use the default copy constructor
+  // use the default copy constructor (so no need for it in .cpp file)
   LargeNum(const LargeNum &other) = default;
 
-  // use the default copy assignment operator
+  // use the default copy assignment operator (so no need for it in .cpp file)
   LargeNum &operator=(const LargeNum &other) = default;
 
-  // use the default destructor
+  // use the default destructor (so no need for it in .cpp file)
   ~LargeNum() = default;
 
   // returns true if the number is zero

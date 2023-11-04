@@ -34,7 +34,7 @@ TEST(Test5, Division)
 	EXPECT_TRUE(LargeNum(25) / LargeNum(-5) == LargeNum(-5));
 
 	//is true that 25 / 7 = 3. (when using integer math)
-	EXPECT_TRUE(LargeNum("25") / LargeNum("7") == LargeNum("3"))
+	EXPECT_TRUE(LargeNum("25") / LargeNum("7") == LargeNum("3"));
 
 	//is true that 7 / 25 = 0. (when using integer math)
 	EXPECT_TRUE(LargeNum("7") / LargeNum("25") == LargeNum("0"));
