@@ -1,384 +1,310 @@
-// Ian Frigillana
-// Project 2
-// CSS 342
-// Professor Pisan
-
 #include "largenum.h"
 #include <algorithm>
 #include <cassert>
 #include <iostream>
+#include <string>
+#include <vector>
 
 using namespace std;
 
-// << operator for large number
+// Your code goes here
+
+// output number with a comma after every 3 digits,
 ostream &operator<<(ostream &out, const LargeNum &num) {
-  if (num.isZero()) {
-    out << "0";
-    return out;
+  string result;
+  string temp = num.num;
+  int high = static_cast<int>(temp.length()) - 1;
+  for (int i = high; i >= 0; i--) {
+    if ((high - i) % 3 == 0 && i != high) {
+      result.push_back(',');
+    }
+    result.push_back(temp[i]);
   }
-  if (num.isNegative) {
+  result = LargeNum::reverse(result);
+  if (!num.isPositive) {
     out << "-";
   }
-  for (int i = num.fig.size() - 1; i >= 0; i--) {
-    out << num.fig[i];
-    if (i > 0 && i % 3 == 0) {
-      out << ",";
-    }
-  }
+  out << result;
   return out;
 }
 
-// Construct large number from a string
+// default constructor from string
 LargeNum::LargeNum(const string &str) {
-  for (int i = str.size() - 1; i >= 0; i--) {
-    if (str[i] == '-') {
-      isNegative = true;
-    } else {
-      fig.push_back(str[i] - '0');
-    }
+  if (str == "-0") {
+    num = "0";
+    return;
   }
-  if (isZero() && isNegative) {
-    negate();
+
+  if (str[0] == '-') {
+    isPositive = false;
+    num = str.substr(1);
+  } else {
+    num = str;
   }
 }
 
-// Construct large number from an integer
+// constructor from int
 LargeNum::LargeNum(int anInteger) {
-  int temp;
-  if (anInteger == 0) {
-    fig.push_back(anInteger);
-  }
-  isNegative = anInteger < 0;
-  if (isNegative) {
+  if (anInteger < 0) {
+    isPositive = false;
     anInteger *= -1;
   }
-  while (anInteger > 0) {
-    temp = anInteger % 10;
-    fig.push_back(temp);
-    anInteger = anInteger / 10;
-  }
+  num = to_string(anInteger);
 }
 
-// Check if number is just zero
-bool LargeNum::isZero() const {
-  for (int nums : fig) {
-    if (nums != 0 && nums != 45) {
-      return false;
-    }
+// reverses the string
+string LargeNum::reverse(string num) {
+  string temp;
+  int length = static_cast<int>(num.length()) - 1;
+  for (int i = length; i >= 0; i--) {
+    temp.push_back(num[i]);
   }
-  return true;
+  return temp;
 }
 
-// Negate
+// returns true if the number is zero
+bool LargeNum::isZero() const { return num == "0"; }
+
+// negate the number, positive becomes negative, negative becomes positive
+// zero is positive
 LargeNum &LargeNum::negate() {
-  if (this->isZero()) {
-    this->isNegative = false;
+  if (isZero()) {
+  } else if (isPositive) {
+    isPositive = false;
+  } else {
+    isPositive = true;
   }
-  this->isNegative = !this->isNegative;
   return *this;
 }
 
-// Addition operator
+// add two nums
 LargeNum LargeNum::operator+(const LargeNum &rhs) const {
-  LargeNum result = LargeNum();
-  result.fig.pop_back();
-  int sum;
-  vector<int> num1;
-  vector<int> num2;
-  // -a + b = b - a
-  if (this->isNegative && !rhs.isNegative) {
-    LargeNum newA = *this;
-    newA.negate();
-    return rhs - newA;
+  string result;
+  if (isPositive && !rhs.isPositive) {
+    return LargeNum(num) - LargeNum(rhs.num);
   }
-  // a + -b = a - b
-  if (!this->isNegative && rhs.isNegative) {
-    LargeNum newA = rhs;
-    newA.negate();
-    return *this - newA;
+  if (!isPositive && rhs.isPositive) {
+    return LargeNum(rhs.num) - LargeNum(num);
   }
-  // Set longer number to num1, shorter to num2
-  if (this->fig.size() >= rhs.fig.size()) {
-    num1 = this->fig;
-    num2 = rhs.fig;
-  } else {
-    num1 = rhs.fig;
-    num2 = this->fig;
-  }
-  // Add trailing zeroes to shorter number (num2)
-  if (num1.size() != num2.size()) {
-    for (int i = num2.size(); i < num1.size(); i++) {
-      num2.push_back(0);
-    }
-  }
-  int maxSize = max(num1.size(), num2.size());
+  string num1 = reverse(num);
+  string num2 = reverse(rhs.num);
   int carry = 0;
-  for (int i = 0; i < maxSize; i++) {
-    sum = carry + num1[i] + num2[i];
-    if (sum > 9) {
-      carry = 1;
-      sum -= 10;
-    } else {
-      carry = 0;
-    }
-    result.fig.push_back(sum);
+  for (int i = 0; i < max(num1.length(), num2.length()); i++) {
+    int temp1 = i < num1.length() ? num1[i] - '0' : 0;
+    int temp2 = i < num2.length() ? num2[i] - '0' : 0;
+    int sum = temp1 + temp2 + carry;
+    carry = sum / 10;
+    result += to_string(sum % 10);
   }
-  if (carry == 1) {
-    result.fig.push_back(1);
+  if (carry != 0) {
+    result += to_string(carry);
   }
-  // -a + -b = -(a+b)
-  if (this->isNegative && rhs.isNegative) {
-    result.negate();
+  result = reverse(result);
+  LargeNum realResult = LargeNum(result);
+  if (!isPositive && !rhs.isPositive) {
+    realResult.isPositive = false;
   }
-  return result;
+  return realResult;
 }
 
-// Multiplication operator
-LargeNum LargeNum::operator*(const LargeNum &rhs) const {
-  // -a * -b = a * b
-  if (this->isNegative && rhs.isNegative) {
-    LargeNum newA = *this;
-    newA.negate();
-    LargeNum newB = rhs;
-    newB.negate();
-    return newA * newB;
-  }
-  // -a * b = -c
-  if (this->isNegative || rhs.isNegative) {
-    LargeNum newA;
-    LargeNum newB;
-    if (this->isNegative) {
-      newA = *this;
-      newB = rhs;
-    } else {
-      newA = rhs;
-      newB = *this;
-    }
-    newA.negate();
-    LargeNum newC = newA * newB;
-    newC.negate();
-    return newC;
-  }
-  // if a * b, and b > a, b * a
-  if (rhs > *this) {
-    return rhs * *this;
-  }
-  LargeNum result = LargeNum(0);
-  for (LargeNum i = LargeNum(1); i <= rhs; i++) {
-    result = result + *this;
-  }
-  return result;
-}
-
-// Division operator
-LargeNum LargeNum::operator/(const LargeNum &rhs) const {
-  // -a / -b = a / b
-  if (this->isNegative && rhs.isNegative) {
-    LargeNum newA = *this;
-    newA.negate();
-    LargeNum newB = rhs;
-    newB.negate();
-    return newA / newB;
-  }
-  // -a / b = -c
-  if (this->isNegative || rhs.isNegative) {
-    LargeNum newA;
-    LargeNum newB;
-    newA = *this;
-    newB = rhs;
-    if (newA.isNegative) {
-      newA.negate();
-    } else {
-      newB.negate();
-    }
-    LargeNum newC = newA / newB;
-    newC.negate();
-    return newC;
-  }
-  LargeNum temp = *this;
-  int count = 0;
-  while (temp >= LargeNum(0)) {
-    temp = temp - rhs;
-    if (temp >= LargeNum(0)) {
-      count++;
-    }
-  }
-  return LargeNum(count);
-}
-
-// Subtraction operator
+// subtract two numbers
 LargeNum LargeNum::operator-(const LargeNum &rhs) const {
-  LargeNum result = LargeNum();
-  result.fig.pop_back();
-  int diff;
-  vector<int> num1;
-  vector<int> num2;
-  if (*this < rhs) {
-    LargeNum newA = rhs - *this;
-    newA.negate();
-    return newA;
+  string result;
+  if (num == rhs.num && isPositive && rhs.isPositive) {
+    return LargeNum("0");
   }
-  // -a - -b = b - a
-  if (this->isNegative && rhs.isNegative) {
-    LargeNum newA = *this;
-    LargeNum newB = rhs;
-    newA.negate();
-    newB.negate();
-    return newB - newA;
+  if (!isPositive && !rhs.isPositive) {
+    return LargeNum(rhs.num) - LargeNum(num);
   }
-  // -a - b = -(a+b)
-  if (this->isNegative && !rhs.isNegative) {
-    LargeNum newA = *this;
-    newA.negate();
-    LargeNum newB = newA + rhs;
-    newB.negate();
-    return newB;
+  if (isPositive && !rhs.isPositive) {
+    return LargeNum(num) + LargeNum(rhs.num);
   }
-  // a - -b = a + b
-  if (!this->isNegative && rhs.isNegative) {
-    LargeNum newA = rhs;
-    newA.negate();
-    return *this + newA;
+
+  LargeNum realResult = LargeNum(result);
+  string num1 = reverse(num);
+  string num2 = reverse(rhs.num);
+  if (num2.length() > num1.length()) {
+    string tempS = num1;
+    num1 = num2;
+    num2 = tempS;
+    realResult.isPositive = false;
   }
-  // Set longer number to num1, shorter to num2
-  if (this->fig.size() >= rhs.fig.size()) {
-    num1 = this->fig;
-    num2 = rhs.fig;
-  } else {
-    num1 = rhs.fig;
-    num2 = this->fig;
-  }
-  // Add trailing zeroes to shorter number (num2)
-  if (num1.size() != num2.size()) {
-    for (int i = num2.size(); i < num1.size(); i++) {
-      num2.push_back(0);
+  int carry = 0;
+  int difference = 0;
+  for (int i = 0; i < max(num1.length(), num2.length()); i++) {
+    int temp1 = i < num1.length() ? num1[i] - '0' : 0;
+    int temp2 = i < num2.length() ? num2[i] - '0' : 0;
+    difference = temp1 - temp2 - carry;
+    carry = 0;
+    if (difference < 0 && i + 1 < num1.length()) {
+      difference += 10;
+      carry = 1;
     }
+    result += to_string(difference);
   }
-  int maxSize = max(num1.size(), num2.size());
-  int borrow = 0;
-  for (int i = 0; i < maxSize; i++) {
-    diff = (borrow + num1[i]) - num2[i];
-    if (diff < 0) {
-      borrow = -1;
-      diff += 10;
-    } else {
-      borrow = 0;
-    }
-    result.fig.push_back(diff);
+  while (result.length() > 1 && result.back() == '0') {
+    result.pop_back();
   }
-  if (diff == 0) {
-    result.fig.pop_back();
-  }
-  return result;
+
+  realResult.num = reverse(result);
+  return realResult;
 }
 
-// Equals operator
+// multiply two numbers
+LargeNum LargeNum::operator*(const LargeNum &rhs) const {
+  if (isZero() || rhs.isZero()) {
+    return LargeNum("0");
+  }
+  LargeNum realResult = LargeNum(0);
+  LargeNum num2 = rhs;
+  if (!rhs.isPositive) {
+    num2.negate();
+  }
+  for (LargeNum i = LargeNum(0); i < num2; i++) {
+    realResult = realResult + *this;
+  }
+  if (!isPositive && !rhs.isPositive) {
+    realResult.isPositive = true;
+  } else if (!isPositive || !rhs.isPositive) {
+    realResult.isPositive = false;
+  }
+  return realResult;
+}
+
+// divide two numbers. rhs is the divisor
+// similar to integer division, ignore remainder
+LargeNum LargeNum::operator/(const LargeNum &rhs) const {
+  if (*this == rhs) {
+    return LargeNum(1);
+  }
+  if (isZero() || rhs.isZero() || num.length() < rhs.num.length()) {
+    return LargeNum(0);
+  }
+  LargeNum num1 = LargeNum(num);
+  LargeNum num2 = rhs;
+  if (!rhs.isPositive) {
+    num2.negate();
+  }
+  LargeNum counter = LargeNum(1);
+  while (num1 > num2) {
+    num1 = num1 - num2;
+    counter++;
+  }
+  if (num1 < num2) {
+    counter--;
+  }
+  if (!isPositive && !rhs.isPositive) {
+    counter.isPositive = true;
+  } else if (!isPositive || !rhs.isPositive) {
+    counter.isPositive = false;
+  }
+  return counter;
+}
+
+// return true if the numbers are equal
 bool LargeNum::operator==(const LargeNum &rhs) const {
-  // If both are Zero
-  if (this->isZero() && rhs.isZero()) {
-    return true;
-  }
-  // If both are positive/negative
-  if ((this->isNegative && rhs.isNegative) ||
-      (!this->isNegative && !rhs.isNegative)) {
-    // And numbers are same length
-    if (this->fig.size() == rhs.fig.size()) {
-      for (int i = 0; i < this->fig.size(); i++) {
-        // If any integers are not the same, numbers are NOT equal
-        if (this->fig[i] != rhs.fig[i]) {
-          return false;
-        }
-      }
-      return true;
-    }
-  }
-  return false;
+  return isPositive == rhs.isPositive && num == rhs.num;
 }
 
-// Not equals operator
+// return true if the nubmers are not equal
 bool LargeNum::operator!=(const LargeNum &rhs) const { return !(*this == rhs); }
 
-// Less than operator
+// return true if the left-hand-side number is less than the
+// right-hand-side
 bool LargeNum::operator<(const LargeNum &rhs) const {
-  if (*this == rhs) {
-    return false;
+  if (!isPositive && !rhs.isPositive) {
+    return LargeNum(num) > LargeNum(rhs);
   }
-  // 0 < non-negative
-  if (this->isZero() && !rhs.isNegative) {
-    return true;
+  if (isPositive != rhs.isPositive) {
+    return !isPositive;
   }
-  // A negative is less than
-  if (this->isNegative) {
-    // A positive
-    if (!rhs.isNegative) {
+  if (num.length() != rhs.num.length()) {
+    return (num.length() < rhs.num.length());
+  }
+  for (int i = 0; i < num.length(); i++) {
+    if (num[i] < rhs.num[i]) {
       return true;
     }
-    // A negative of same size with a smaller left-most figure
-    if (this->fig.size() == rhs.fig.size()) {
-      for (int i = rhs.fig.size() - 1; i >= 0; i--) {
-        if (this->fig[i] > rhs.fig[i]) {
-          return true;
-        }
-      }
+    if (num[i] > rhs.num[i]) {
       return false;
     }
-    // A negative that is shorter
-    return rhs.fig.size() < this->fig.size();
-  }
-  // If both are positive
-  if (!rhs.isNegative) {
-    // The number with smallest left-most figure is smaller
-    if (this->fig.size() == rhs.fig.size()) {
-      for (int i = rhs.fig.size() - 1; i >= 0; i--) {
-        if (this->fig[i] < rhs.fig[i]) {
-          return true;
-        }
-      }
-      return false;
-    }
-    // The shorter number is smaller
-    return this->fig.size() < rhs.fig.size();
   }
   return false;
 }
 
-// Greater than operator
+// return true if the left-hand-side number is greater than the
+// right-hand-side number
 bool LargeNum::operator>(const LargeNum &rhs) const {
-  return *this != rhs && !(*this < rhs);
+  if (!isPositive && !rhs.isPositive) {
+    return LargeNum(num) < LargeNum(rhs.num);
+  }
+  if (isPositive != rhs.isPositive) {
+    return isPositive;
+  }
+  if (num.length() != rhs.num.length()) {
+    return (num.length() > rhs.num.length());
+  }
+  for (int i = 0; i < num.length(); i++) {
+    if (num[i] > rhs.num[i]) {
+      return true;
+    }
+    if (num[i] < rhs.num[i]) {
+      return false;
+    }
+  }
+  return false;
 }
 
-// Less than or equal to operator
+// return true if the left-hand-side number is less than or equal to the
+// right-hand-side number
 bool LargeNum::operator<=(const LargeNum &rhs) const {
-  return *this < rhs || *this == rhs;
+  return (*this == rhs) || (*this < rhs);
 }
 
-// Greater than or equal to operator
+// return true if the left-hand-side number is greater than or equal to the
+// right-hand-side number
 bool LargeNum::operator>=(const LargeNum &rhs) const {
-  return *this > rhs || *this == rhs;
+  return (*this == rhs) || (*this > rhs);
 }
 
-// prefix increment operator
+// prefix increment
 LargeNum &LargeNum::operator++() {
+  if (!isPositive) {
+    this->num = (*this - LargeNum(1)).num;
+    if (isZero()) {
+      isPositive = true;
+    }
+    return *this;
+  }
   *this = *this + LargeNum(1);
   return *this;
 }
 
-// postfix decrement opterator
+// postfix increment
 LargeNum LargeNum::operator++(int) {
   LargeNum copy(*this);
-  ++(*this);
+  *this = *this + LargeNum(1);
   return copy;
 }
 
-// prefix decrement operator
+// prefix decrement
 LargeNum &LargeNum::operator--() {
+
+  if (isZero()) {
+    *this = LargeNum(-1);
+    return *this;
+  }
+  if (!isPositive) {
+    this->num = (*this + LargeNum(-1)).num;
+    return *this;
+  }
   *this = *this - LargeNum(1);
   return *this;
 }
 
-// postfix decrement operator
+// postfix decrement
 LargeNum LargeNum::operator--(int) {
   LargeNum copy(*this);
-  --(*this);
+  *this = *this - LargeNum(1);
   return copy;
-};
+}

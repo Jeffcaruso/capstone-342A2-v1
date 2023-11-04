@@ -10,12 +10,13 @@ class LargeNum {
 
 private:
   // Define private data members and methods here
-  vector<int> fig;
-  bool isNegative = false;
+  bool isPositive = true;
+  string num;
+  static string reverse(string num);
 
 public:
   // default constructor from string
-  explicit LargeNum(const string &str = "0");
+  explicit LargeNum(const string &str);
 
   // constructor from int
   explicit LargeNum(int anInteger);
