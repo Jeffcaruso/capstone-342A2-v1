@@ -2,455 +2,361 @@
 #include <algorithm>
 #include <cassert>
 #include <iostream>
-#include <math.h>
 #include <string>
 
 using namespace std;
 
-// String constructor for LargeNum
-LargeNum::LargeNum(const string &str) {
-  int index = 0;
-  if (str[0] == '-') {
-    isNegative = true;
-    index = 1;
-  }
-  for (int i = index; i < str.size(); i++) {
-    largeNum.push_back(str[i] - '0');
-  }
-  reverse(largeNum.begin(), largeNum.end());
-};
-
-// Integer constructor for LargeNum
-LargeNum::LargeNum(int anInteger) {
-  if (anInteger < 0) {
-    isNegative = true;
-    anInteger *= -1;
-  }
-  if (anInteger == 0) {
-    largeNum.push_back(anInteger);
-    isNegative = false;
-  }
-  while (anInteger > 0) {
-    int remainder = anInteger % 10;
-    largeNum.push_back(remainder);
-    anInteger /= 10;
-  }
-}
-
-// Makes LargeNum printable
+// Overloaded << operator to print LargeNum
 ostream &operator<<(ostream &out, const LargeNum &num) {
-  string hold;
-  for (int i = 0; i < static_cast<int>(num.largeNum.size()); ++i) {
-    if (i % 3 == 0 && i > 0) {
-      hold += ",";
-    }
-    hold += static_cast<char>(num.largeNum[i] + 48);
+  std::string str = num.number;
+  int size = static_cast<int>(num.number.size());
+  for (int i = size - 3; i > 0; i -= 3) {
+    str.insert(static_cast<std::string::size_type>(i), 1, ',');
   }
-  if (num.isNegative) {
-    hold += "-";
+  if (!num.isPositive) {
+    str = '-' + str;
   }
-  reverse(hold.begin(), hold.end());
-  out << hold;
+  out << str;
   return out;
 }
 
-// returns true if the number is zero
-bool LargeNum::isZero() const {
-  return (largeNum.size() == 1 && largeNum[0] == 0);
-}
-
-// negate the number, positive becomes negative, negative becomes positive
-LargeNum &LargeNum::negate() {
-  if (largeNum.size() == 1 && largeNum[0] == 0) {
-    isNegative = false;
+// Constructor that initializes a LargeNum from a string
+LargeNum::LargeNum(const string &str) {
+  if (str[0] == '-') {
+    number = str;
+    isPositive = false;
+    number.erase(0, 1);
   } else {
-    if (isNegative) {
-      isNegative = false;
-    } else if (!isNegative) {
-      isNegative = true;
-    }
+    number = str;
   }
+}
+
+// Constructor that initializes a LargeNum from an integer
+LargeNum::LargeNum(int anInteger) {
+  if (anInteger < 0) {
+    isPositive = false;
+    anInteger *= -1;
+  }
+  number = to_string(anInteger);
+}
+
+// Check if the LargeNum is zero
+bool LargeNum::isZero() const {
+  bool isZero = false;
+  if (number == "0") {
+    isZero = true;
+  }
+  return isZero;
+}
+
+// Negate the sign of the LargeNum (positive to negative and vice versa)
+LargeNum &LargeNum::negate() {
+  if (number == "0") {
+    isPositive = true;
+    return *this;
+  }
+  if (isPositive) {
+    isPositive = false;
+    return *this;
+  }
+  isPositive = true;
   return *this;
 }
 
-// Removes excess 0s from the front of the vector
-LargeNum LargeNum::removeZeros(LargeNum other) {
-  for (auto i = static_cast<int>(other.largeNum.size() - 1); i > 0; --i) {
-    if (other.largeNum[i] == 0) {
-      other.largeNum.pop_back();
-    } else if (other.largeNum[i] != 0) {
-      break;
-    }
-  }
-  return other;
-}
-
-// Adds two LargeNums together
+// Overloaded + operator for adding LargeNum objects
 LargeNum LargeNum::operator+(const LargeNum &rhs) const {
-  uint64_t size = max(rhs.largeNum.size(), largeNum.size());
-  int remainder = 0;
-  int current = 0;
-  LargeNum hold;
-  hold.largeNum.pop_back();
-  bool adding = true;
-  int index = 0;
-
-  if (!isNegative && rhs.isNegative) {
-    LargeNum temp = rhs;
-    temp.negate();
-    return (*this - temp);
-  }
-  if (isNegative && !(rhs.isNegative)) {
-    LargeNum temp1 = *this;
-    temp1.negate();
-    LargeNum temp2 = rhs;
-    temp1 = temp1 - temp2;
-    temp1.negate();
-    return temp1;
-  }
-  if (isNegative && rhs.isNegative) {
-    LargeNum temp1 = *this;
-    temp1.negate();
-    LargeNum temp2 = rhs;
-    temp2.negate();
-    temp1 = temp1 + temp2;
-    temp1.negate();
-    return temp1;
-  }
-
-  while (adding) {
-    current = 0;
-    if (index < rhs.largeNum.size() && index < largeNum.size()) {
-      current = largeNum[index] + rhs.largeNum[index] + remainder;
-      remainder = 0;
-    } else if (index < rhs.largeNum.size() && index >= largeNum.size()) {
-      current = rhs.largeNum[index] + remainder;
-      remainder = 0;
-    } else if (index >= rhs.largeNum.size() && index < largeNum.size()) {
-      current = largeNum[index] + remainder;
-      remainder = 0;
+  if ((isPositive && rhs.isPositive) || (!isPositive && !rhs.isPositive)) {
+    string number1 = number;
+    string number2 = rhs.number;
+    int num = 0;
+    string sum;
+    while (number1.size() > number2.size()) {
+      number2 = '0' + number2;
     }
-    if (current < 10) {
-      hold.largeNum.push_back(current);
-      ++index;
-    } else if (current == 10) {
-      hold.largeNum.push_back(0);
-      remainder = 1;
-      ++index;
-    } else if (current > 10) {
-      hold.largeNum.push_back(current - 10);
-      remainder = 1;
-      ++index;
+    while (number1.size() < number2.size()) {
+      number1 = '0' + number1;
     }
-    if (remainder == 1 && index == size) {
-      hold.largeNum.push_back(1);
-      break;
+    for (std::string::size_type i = number1.size() - 1;
+         i != static_cast<std::string::size_type>(-1); i--) {
+      num = (number1[i] - '0') + (number2[i] - '0') + num;
+      sum = static_cast<char>((num % 10) + '0') + sum;
+      num /= 10;
     }
-    if (remainder == 0 && index == size) {
-      break;
+    if (num == 1) {
+      sum = '1' + sum;
     }
+    if (!(isPositive && rhs.isPositive)) {
+      return LargeNum(sum).negate();
+    }
+    return LargeNum(sum);
   }
-  hold = removeZeros(hold);
-  return hold;
+  if (isPositive && !rhs.isPositive) {
+    LargeNum negatedRhs = rhs;
+    negatedRhs.negate();
+    return *this - negatedRhs;
+  }
+  LargeNum negatedCur = *this;
+  negatedCur.negate();
+  return rhs - negatedCur;
 }
 
-// Subtraction operator for LargeNum objects
+// Overloaded - operator for subtracting LargeNum objects
 LargeNum LargeNum::operator-(const LargeNum &rhs) const {
-  uint64_t size = max(rhs.largeNum.size(), largeNum.size());
-  int borrow = 0;
-  int current = 0;
-  LargeNum hold;
-  hold.largeNum.pop_back();
-  int index = 0;
-
-  if (!isNegative && rhs.isNegative) {
-    LargeNum temp = rhs;
-    temp.negate();
-    return (*this + temp);
-  }
-  if (isNegative && !(rhs.isNegative)) {
-    LargeNum temp1 = *this;
-    temp1.negate();
-    LargeNum temp2 = rhs;
-    temp1 = temp1 + temp2;
-    temp1.negate();
-    return temp1;
-  }
-  if (isNegative && rhs.isNegative) {
-    LargeNum temp1 = *this;
-    temp1.negate();
-    LargeNum temp2 = rhs;
-    temp2.negate();
-    temp1 = temp1 - temp2;
-    temp1.negate();
-    return temp1;
-  }
-  if (!(isNegative && rhs.isNegative) &&
-      rhs.largeNum.size() > largeNum.size()) {
-    LargeNum temp = rhs - *this;
-    temp.negate();
-    return temp;
-  }
-
-  while (!(index == size)) {
-    current = 0;
-    if (index < rhs.largeNum.size() && index < largeNum.size()) {
-      current = largeNum[index] - rhs.largeNum[index] - borrow;
-      borrow = 0;
-    } else if (index < rhs.largeNum.size() && index >= largeNum.size()) {
-      current = rhs.largeNum[index];
-    } else if (index >= rhs.largeNum.size() && index < largeNum.size()) {
-      current = largeNum[index] - borrow;
-      borrow = 0;
+  if (isPositive && rhs.isPositive) {
+    std::string number1 = number;
+    std::string number2 = rhs.number;
+    bool flipped = false;
+    if (*this < rhs) {
+      number1 = rhs.number;
+      number2 = number;
+      flipped = true;
     }
-    if (current < 10 && current > 0) {
-      hold.largeNum.push_back(current);
-      ++index;
-    } else if (current == 0) {
-      hold.largeNum.push_back(0);
-      ++index;
-    } else if (current < 0 && index < (largeNum.size() - 1)) {
-      current += 10;
-      hold.largeNum.push_back(current);
-      borrow = 1;
-      ++index;
-    } else if (current < 0 && index >= (largeNum.size() - 1)) {
-      current *= -1;
-      hold.negate();
-      hold.largeNum.push_back(current);
-      ++index;
+    std::string difference;
+    int num = 0;
+    while (number1.size() > number2.size()) {
+      number2 = '0' + number2;
     }
+    while (number1.size() < number2.size()) {
+      number1 = '0' + number1;
+    }
+    for (std::string::size_type i = number1.size() - 1;
+         i != static_cast<std::string::size_type>(-1); i--) {
+      int digit1 = number1[i] - '0';
+      int digit2 = number2[i] - '0';
+      int tempDiff = digit1 - digit2 - num;
+
+      if (tempDiff < 0) {
+        tempDiff += 10;
+        num = 1;
+      } else {
+        num = 0;
+      }
+      difference = static_cast<char>(tempDiff + '0') + difference;
+    }
+    difference.erase(
+        0, std::min(difference.find_first_not_of('0'), difference.size() - 1));
+    if (difference.empty()) {
+      difference = "0";
+    }
+    if (flipped) {
+      return LargeNum(difference).negate();
+    }
+    return LargeNum(difference);
   }
-  hold = removeZeros(hold);
-  return hold;
+  if (isPositive && !rhs.isPositive) {
+    LargeNum negatedRhs = rhs;
+    negatedRhs.negate();
+    return *this + negatedRhs;
+  }
+  if (!isPositive && rhs.isPositive) {
+    LargeNum negatedThis = rhs;
+    negatedThis.negate();
+    return *this + negatedThis;
+  }
+  LargeNum negatedRhs = rhs;
+  negatedRhs.negate();
+  LargeNum result = *this + negatedRhs;
+  return result;
 }
 
-// Multiplier helper function
-LargeNum LargeNum::multiplyLargeNum(const LargeNum first,
-                                    const LargeNum second) {
-  LargeNum temp = first;
-  LargeNum temp1 = temp;
-  for (int ele = 0; ele < second.largeNum.size(); ++ele) {
-    int control = 0;
-    if (ele == 0) {
-      control = 1;
-    } else {
-      control = 0;
-    }
-    for (int i = 0; i < (second.largeNum[ele] * (pow(10, ele)) - control);
-         ++i) {
-      temp1 = temp1 + temp;
-    }
-  }
-  return temp1;
-}
-
-// Multiplication operator for LargeNum objects
+// Overloaded * operator for multiplying LargeNum objects
 LargeNum LargeNum::operator*(const LargeNum &rhs) const {
-  if (rhs.isZero() || this->isZero()) {
-    return LargeNum(0);
-  }
-  if (isNegative && !(rhs.isNegative)) {
-    LargeNum temp = *this;
-    temp.negate();
-    LargeNum temp1 = temp;
-    for (auto ele : rhs.largeNum) {
-      for (int i = 0; i < ele - 1; ++i) {
-        temp1 = temp1 + temp;
-      }
+  LargeNum result("0");
+  if (isPositive && rhs.isPositive) {
+    LargeNum number1(*this);
+    LargeNum number2(rhs);
+    while (number2.number != "0") {
+      result = result + number1;
+      number2 = number2 - LargeNum("1");
     }
-    temp1.negate();
-    return temp1;
+    return result;
   }
-  if (!isNegative && rhs.isNegative) {
-    LargeNum temp = *this;
-    LargeNum temp1 = temp;
-    for (auto ele : rhs.largeNum) {
-      for (int i = 0; i < ele - 1; ++i) {
-        temp1 = temp1 + temp;
-      }
-    }
-    temp1.negate();
-    return temp1;
+  if (!isPositive && !rhs.isPositive) {
+    LargeNum negatedRhs = rhs;
+    negatedRhs.negate();
+    LargeNum negated = *this;
+    negated.negate();
+    return negatedRhs * negated;
   }
-  if (isNegative && rhs.isNegative) {
-    LargeNum temp = *this;
-    temp.negate();
-    LargeNum temp1 = temp;
-    for (auto ele : rhs.largeNum) {
-      for (int i = 0; i < ele - 1; ++i) {
-        temp1 = temp1 + temp;
-      }
-    }
-    return temp1;
+  LargeNum negated;
+  LargeNum negatedRhs;
+  if (!isPositive) {
+    negated = *this;
+    negated.negate();
+    negatedRhs = rhs;
+  } else {
+    negatedRhs = rhs;
+    negatedRhs.negate();
+    negated = *this;
   }
-  if (!isNegative && !(rhs.isNegative)) {
-    return (multiplyLargeNum(*this, rhs));
-  }
-  return LargeNum();
+  return (negatedRhs * negated).negate();
 }
 
-// Division operator for LargeNum objects
+// Overloaded / operator for dividing LargeNum objects
 LargeNum LargeNum::operator/(const LargeNum &rhs) const {
-  if (this->isZero()) {
-    return LargeNum(0);
-  }
-  if (rhs.largeNum.size() > largeNum.size()) {
-    return LargeNum(0);
-  }
-  LargeNum temp = *this;
-
-  if (isNegative && !(rhs.isNegative)) {
-    temp.negate();
-    temp = temp / rhs;
-    temp.negate();
-    return temp;
-  }
-  if (!isNegative && rhs.isNegative) {
-    LargeNum temp2 = rhs;
-    temp2.negate();
-    temp = temp / temp2;
-    temp.negate();
-    return temp;
-  }
-  if (isNegative && rhs.isNegative) {
-    temp.negate();
-    LargeNum temp2 = rhs;
-    temp2.negate();
-    temp = temp / temp2;
-    return temp;
-  }
-
-  bool divisible = false;
-  if (temp >= rhs) {
-    divisible = true;
-  }
-  int counter = 0;
-  while (divisible) {
-    temp = temp - rhs;
-    counter += 1;
-    divisible = false;
-    if (temp >= rhs) {
-      divisible = true;
+  if (isPositive && rhs.isPositive) {
+    LargeNum result("0");
+    LargeNum number1(*this);
+    LargeNum number2(rhs);
+    if (number1 == result || number1 < number2) {
+      return result;
     }
+    while (number1 != LargeNum("0")) {
+      number1 = number1 - number2;
+      result = result + LargeNum("1");
+      if (number1 < number2) {
+        return result;
+      }
+    }
+    return result;
   }
-  return LargeNum(counter);
+  if (!isPositive && !rhs.isPositive) {
+    LargeNum negatedRhs = rhs;
+    negatedRhs.negate();
+    LargeNum negated = *this;
+    negated.negate();
+    return negated / negatedRhs;
+  }
+  LargeNum negated;
+  LargeNum negatedRhs;
+  if (!isPositive) {
+    negated = *this;
+    negated.negate();
+    negatedRhs = rhs;
+  } else {
+    negatedRhs = rhs;
+    negatedRhs.negate();
+    negated = *this;
+  }
+  return (negated / negatedRhs).negate();
 }
 
-// Compares if two LargeNum are equal
+// Overloaded == operator to check equality between LargeNum objects
 bool LargeNum::operator==(const LargeNum &rhs) const {
-  if (largeNum.size() != rhs.largeNum.size() || isNegative != rhs.isNegative) {
-    return false;
+  bool same = false;
+  if (number == rhs.number && isPositive == rhs.isPositive) {
+    same = true;
   }
-  for (int i = 0; i < largeNum.size(); ++i) {
-    if (largeNum[i] != rhs.largeNum[i]) {
-      return false;
-    }
-  }
-  return true;
+  return same;
 }
 
-// Compares if two LargeNum are not equal
+// Overloaded != operator to check inequality between LargeNum objects
 bool LargeNum::operator!=(const LargeNum &rhs) const {
-  if (largeNum.size() != rhs.largeNum.size() || isNegative != rhs.isNegative) {
-    return true;
+  bool different = false;
+  if (number != rhs.number || isPositive != rhs.isPositive) {
+    different = true;
   }
-  for (int i = 0; i < largeNum.size(); ++i) {
-    if (largeNum[i] != rhs.largeNum[i]) {
-      return true;
-    }
-  }
-  return false;
+  return different;
 }
 
-// Compares if a LargeNum is less than another
+// Overloaded < operator to check if this LargeNum is less than another
 bool LargeNum::operator<(const LargeNum &rhs) const {
-  if (isNegative && !(rhs.isNegative)) {
+  if (!isPositive && !rhs.isPositive) {
+    LargeNum negated = *this;
+    negated.negate();
+    LargeNum negatedRhs = rhs;
+    negatedRhs.negate();
+    return negated > negatedRhs;
+  }
+  bool lessThan = false;
+  if (!isPositive && rhs.isPositive) {
     return true;
   }
-  if (!isNegative && rhs.isNegative) {
+  if (isPositive && !rhs.isPositive) {
     return false;
   }
-  if ((isNegative && rhs.isNegative) &&
-      (largeNum.size() > rhs.largeNum.size())) {
-    return true;
-  }
-  if (!(isNegative && rhs.isNegative) &&
-      (largeNum.size() < rhs.largeNum.size())) {
-    return true;
-  }
-
-  for (auto i = static_cast<int>(largeNum.size() - 1); i >= 0; --i) {
-    if (largeNum[i] < rhs.largeNum[i]) {
-      return true;
-    }
-    if (largeNum[i] > rhs.largeNum[i]) {
-      return false;
+  if (number.size() < rhs.number.size()) {
+    lessThan = true;
+  } else if (number.size() == rhs.number.size()) {
+    for (int i = 0; i < number.size(); i++) {
+      int first = number[i] - '0';
+      int second = rhs.number[i] - '0';
+      if (first < second) {
+        return true;
+      }
+      if (first > second) {
+        return false;
+      }
     }
   }
-  return false;
+  return lessThan;
 }
 
-// Compares if a LargeNum is greater than another
+// Overloaded > operator to check if this LargeNum is greater than another
 bool LargeNum::operator>(const LargeNum &rhs) const {
-  if (!isNegative && (rhs.isNegative)) {
+  if (!isPositive && !rhs.isPositive) {
+    LargeNum negated = *this;
+    negated.negate();
+    LargeNum negatedRhs = rhs;
+    negatedRhs.negate();
+    return negated < negatedRhs;
+  }
+  bool greaterThan = false;
+  if (isPositive && !rhs.isPositive) {
     return true;
   }
-  if (isNegative && !(rhs.isNegative)) {
+  if (!isPositive && rhs.isPositive) {
     return false;
   }
-  if ((isNegative && rhs.isNegative) &&
-      (largeNum.size() < rhs.largeNum.size())) {
-    return true;
-  }
-  if (!(isNegative && rhs.isNegative) &&
-      (largeNum.size() > rhs.largeNum.size())) {
-    return true;
-  }
-
-  for (auto i = static_cast<int>(largeNum.size() - 1); i >= 0; --i) {
-    if (largeNum[i] > rhs.largeNum[i]) {
-      return true;
-    }
-    if (largeNum[i] < rhs.largeNum[i]) {
-      return false;
+  if (number.size() > rhs.number.size()) {
+    greaterThan = true;
+  } else if (number.size() == rhs.number.size()) {
+    for (int i = 0; i < number.size(); i++) {
+      int first = number[i] - '0';
+      int second = rhs.number[i] - '0';
+      if (first > second) {
+        return true;
+      }
+      if (first > second) {
+        return false;
+      }
     }
   }
-  return false;
+  return greaterThan;
 }
 
-// Checks to see if the main object is less than or equal the second
+// Overloaded <= operator to check if this LargeNum is less than or equal to
+// another
 bool LargeNum::operator<=(const LargeNum &rhs) const {
-  return ((*this == rhs) || (*this < rhs));
+  bool lte = false;
+  if (*this < rhs || *this == rhs) {
+    lte = true;
+  }
+  return lte;
 }
 
-// Checks to see if the main object is greater than or equal the second
+// Overloaded >= operator to check if this LargeNum is greater than or equal to
+// another
 bool LargeNum::operator>=(const LargeNum &rhs) const {
-  return ((*this == rhs) || (*this > rhs));
+  bool gte;
+  if (*this > rhs || *this == rhs) {
+    gte = true;
+  }
+  return gte;
 }
 
-// Prefix increment the LargeNum object by 1
+// Prefix increment operator
 LargeNum &LargeNum::operator++() {
-  *this = *this + LargeNum(1);
+  *this = *this + LargeNum("1");
   return *this;
 }
 
-// Postfix increment the LargeNum object by 1
+// Postfix increment operator
 LargeNum LargeNum::operator++(int) {
-  LargeNum temp = *this;
-  *this = *this + LargeNum(1);
-  return temp;
+  LargeNum postInc = *this;
+  *this = *this + LargeNum("1");
+  return LargeNum(postInc);
 }
 
-// Prefix decrement the LargeNum object by 1
+// Prefix decrement operator
 LargeNum &LargeNum::operator--() {
-  *this = *this - LargeNum(1);
+  *this = *this - LargeNum("1");
   return *this;
 }
 
-/// Postfix decrement the LargeNum object by 1
+// Postfix decrement operator
 LargeNum LargeNum::operator--(int) {
-  LargeNum temp = *this;
-  *this = *this - LargeNum(1);
-  return temp;
+  LargeNum postDec = *this;
+  *this = *this - LargeNum("1");
+  return LargeNum(postDec);
 }
