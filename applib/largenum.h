@@ -10,10 +10,7 @@ class LargeNum {
 
 private:
   // Define private data members and methods here
-  string largeNum; // to internally store the large number
-  bool isPositive = true; // true if large number is positive, false otherwise
-  void reverseString(); // this class internally stores the large number in reverse order.
-  static int compareStrings(const string& str1, const string& str2); // return true if str1 numerical value is greater than str2, false otherwise
+  string Num = "";
 
 public:
   // default constructor from string
@@ -22,13 +19,13 @@ public:
   // constructor from int
   explicit LargeNum(int anInteger);
 
-  // use the default copy constructor
+  // use the default copy constructor (so no need for it in .cpp file)
   LargeNum(const LargeNum &other) = default;
 
-  // use the default copy assignment operator
+  // use the default copy assignment operator (so no need for it in .cpp file)
   LargeNum &operator=(const LargeNum &other) = default;
 
-  // use the default destructor
+  // use the default destructor (so no need for it in .cpp file)
   ~LargeNum() = default;
 
   // returns true if the number is zero
