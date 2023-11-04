@@ -10,10 +10,6 @@ class LargeNum {
 
 private:
   // Define private data members and methods here
-  // Define private data members and methods here
-  vector<int> number;
-  bool isNeg = false;
-  void init(const string& str);
 
 public:
   // default constructor from string
