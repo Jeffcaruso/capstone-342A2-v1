@@ -1,9 +1,9 @@
 name: GTest
 on:
   push:
-    branches: [ main, StudentCodeTesting  ]
+    branches: [ main, StudentCodeTesting, SCT2  ]
   pull_request:
-    branches: [ main, StudentCodeTesting  ]
+    branches: [ main, StudentCodeTesting, SCT2  ]
   workflow_dispatch:
 
 jobs:
