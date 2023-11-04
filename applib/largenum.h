@@ -9,13 +9,13 @@ class LargeNum {
   friend ostream &operator<<(ostream &out, const LargeNum &num);
 
 private:
-  // vector of digits as ints
-  vector<int> digits;
+  // Define private data members and methods here
+  vector<int> bigNum;
 
-  bool isPositive = true;
+  mutable bool isNegative = false;
 
 public:
-  // default constructor from string
+  // default constructor from string removed 0
   explicit LargeNum(const string &str = "0");
 
   // constructor from int
