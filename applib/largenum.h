@@ -1,5 +1,4 @@
 #include <iostream>
-#include <vector>
 
 using namespace std;
 
@@ -9,16 +8,45 @@ class LargeNum {
   friend ostream &operator<<(ostream &out, const LargeNum &num);
 
 private:
-  // Define private data members and methods here
+  // stores the large num
+  string largeNum;
 
-  // Reverse number
-  string backNum;
-
-  // Tells if the number is positive
+  // represents if the largenum is pos/neg
   bool isPositive = true;
+
+  // returns the larger LargeNum
+  LargeNum getLargestNum(const LargeNum &rhs) const {
+    if (*this > rhs) {
+      return *this;
+    }
+    return rhs;
+  }
+
+  // returns the smaller LargeNum
+  LargeNum getSmallestNum(const LargeNum &rhs) const {
+    if (*this < rhs) {
+      return *this;
+    }
+    return rhs;
+  }
+
+  static string removeLeadingZeros(string temp) {
+    // remove leading zeros
+    int index = temp.size() - 1;
+    if (temp[index] == '0' && temp.size() > 1) {
+
+      for (int j = temp.size() - 1; j > 0; j--) {
+        if (temp[j] == '0') {
+          temp.pop_back();
+        }
+      }
+    }
+    return temp;
+  }
 
 public:
   // default constructor from string
+  // try to store it in reverse?
   explicit LargeNum(const string &str = "0");
 
   // constructor from int
