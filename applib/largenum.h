@@ -1,11 +1,3 @@
-/*
- *  largenum.h - Class for large Int-like numbers
- *
- *  Modified by Amy Vier
- *
- *  Updated on Oct. 22, 2023
- */
-
 #include <iostream>
 #include <vector>
 
@@ -17,18 +9,9 @@ class LargeNum {
   friend ostream &operator<<(ostream &out, const LargeNum &num);
 
 private:
-  string number; // number
-  bool negative; // whether the number is negative or not
-
-  // adds two strings, ignoring the possibility of negatives
-  static string add(string lhs, string rhs);
-
-  // subtracts two strings, ignoring the possibility of negatives
-  static string subtract(string lhs, string rhs);
-
-  // compares two strings, whether one is less than the other, ignoring
-  // the possibility of negatives
-  static bool less(string smaller, string bigger);
+  // Define private data members and methods here
+  vector<int> largeNum;
+  bool isNegative = false;
 
 public:
   // default constructor from string
@@ -53,11 +36,17 @@ public:
   // Zero is always positive
   LargeNum &negate();
 
+  // Removes excess 0s from the front of the vector
+  static LargeNum removeZeros(LargeNum other);
+
   // add two numbers
   LargeNum operator+(const LargeNum &rhs) const;
 
   // subtract two numbers
   LargeNum operator-(const LargeNum &rhs) const;
+
+  // loops through addition segment of the multiplication function
+  static LargeNum multiplyLargeNum(LargeNum first, LargeNum second);
 
   // multiply two numbers
   LargeNum operator*(const LargeNum &rhs) const;
