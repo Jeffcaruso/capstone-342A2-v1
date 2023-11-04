@@ -10,22 +10,24 @@ class LargeNum {
 
 private:
   // Define private data members and methods here
-  string Num = "";
+  vector<int> bigNum;
+
+  mutable bool isNegative = false;
 
 public:
-  // default constructor from string
+  // default constructor from string removed 0
   explicit LargeNum(const string &str = "0");
 
   // constructor from int
   explicit LargeNum(int anInteger);
 
-  // use the default copy constructor (so no need for it in .cpp file)
+  // use the default copy constructor
   LargeNum(const LargeNum &other) = default;
 
-  // use the default copy assignment operator (so no need for it in .cpp file)
+  // use the default copy assignment operator
   LargeNum &operator=(const LargeNum &other) = default;
 
-  // use the default destructor (so no need for it in .cpp file)
+  // use the default destructor
   ~LargeNum() = default;
 
   // returns true if the number is zero
