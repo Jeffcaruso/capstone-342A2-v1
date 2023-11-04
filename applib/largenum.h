@@ -10,7 +10,11 @@ class LargeNum {
 
 private:
   // Define private data members and methods here
-  string number;
+
+  // Reverse number
+  string backNum;
+
+  // Tells if the number is positive
   bool isPositive = true;
 
 public:
@@ -35,7 +39,6 @@ public:
   // negate the number, positive becomes negative, negative becomes positive
   // Zero is always positive
   LargeNum &negate();
-
 
   // add two numbers
   LargeNum operator+(const LargeNum &rhs) const;
