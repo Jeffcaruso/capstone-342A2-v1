@@ -10,13 +10,14 @@ class LargeNum {
 
 private:
   // Define private data members and methods here
-  bool isPositive = true;
-  string num;
-  static string reverse(string num);
+  string largeNum; // to internally store the large number
+  bool isPositive = true; // true if large number is positive, false otherwise
+  void reverseString(); // this class internally stores the large number in reverse order.
+  static int compareStrings(const string& str1, const string& str2); // return true if str1 numerical value is greater than str2, false otherwise
 
 public:
   // default constructor from string
-  explicit LargeNum(const string &str);
+  explicit LargeNum(const string &str = "0");
 
   // constructor from int
   explicit LargeNum(int anInteger);
