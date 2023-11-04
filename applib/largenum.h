@@ -10,6 +10,8 @@ class LargeNum {
 
 private:
   // Define private data members and methods here
+  vector<int> fig;
+  bool isNegative = false;
 
 public:
   // default constructor from string
