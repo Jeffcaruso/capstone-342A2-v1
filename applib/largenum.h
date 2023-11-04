@@ -9,8 +9,11 @@ class LargeNum {
   friend ostream &operator<<(ostream &out, const LargeNum &num);
 
 private:
-  bool isPositive = true;;
-  vector<char> num;
+  // Define private data members and methods here
+  // Define private data members and methods here
+  vector<int> number;
+  bool isNeg = false;
+  void init(const string& str);
 
 public:
   // default constructor from string
@@ -27,9 +30,6 @@ public:
 
   // use the default destructor
   ~LargeNum() = default;
-
-  // returns size of LargeNum
-  int size() const;
 
   // returns true if the number is zero
   bool isZero() const;
