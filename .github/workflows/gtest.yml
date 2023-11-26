@@ -20,14 +20,6 @@ jobs:
             sudo make install
     - name: Install Bazel
       run: sudo npm install -g @bazel/bazelisk
-      
-      # git clone https://github.com/bazelbuild/bazelisk;
-      #       sudo npm install -g @bazel/bazelisk
-      #old install bazel run...
-      # sudo apt install nodejs &&
-      # sudo npm install -g @bazel/bazelisk
-
-
     - uses: actions/checkout@v1
     #using the create-output.sh as a guide...
     - name: g++ compilation
