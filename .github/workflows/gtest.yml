@@ -170,6 +170,6 @@ jobs:
       # 2) copy the content from one of the run tests (not build)
       # 3) modify the Build file in the testing folder that holds these test scripts.
 
-      # additional note, user code expected in: Src, Inc
+      # additional note, user code expected in: applib
 
       
