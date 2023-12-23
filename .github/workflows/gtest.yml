@@ -21,34 +21,15 @@ jobs:
     - name: Install Bazel
       run: sudo npm install -g @bazel/bazelisk
     - uses: actions/checkout@v1
-    #using the create-output.sh as a guide...
     - name: g++ compilation
-      run:  g++ -g -std=c++14 -Wall -Wextra -Wno-sign-compare applib/largenum.cpp building.cpp
-
-    # was at least able to get this part working while not breaking the gTest + bazel. 
-    # The rest will also need to be added as well, but for now, this is a good stopping point it working tonight...
-
-
-    #current plan early morning 10/27:
-    # 1) Get other 'old' tests put in her for build... (excluding valgrind...)
-    # 2) Once it works, get rid of the mess of comments directly below this...
-
-
-    #for g++ to find the files headers (and code files), they need to be in same directory.
-    # so realistically, that would mean either:
-    # 1) copy headers to Src folder too... (bazel uses .cpp for src, so prob ok) - failed
-    # 2) implement all at same level (undoing folders, would have to modify bazel scripts (not preferred))
-    # 3) Determine how necessary the other testing is beyond Bazel test + Valgrind which is working great...
-        # i.e., even in the example output, it shows leaving some clang tidys not fixed (including not just making a -1 index var for 2 tests using -9,-10).
-
-    # other option is I could just make a folder to use for this, having copies made automatically. i.e., cp src/pokedex.cpp buildTest/pokedex.cpp.
-
-    # plan moving forward is: #1 (if this works, and its not a large effort to include, do so); 
-            # Then #3 (if this is not really being used that much anyways as a criteria, do we need it at all?);
-            # last #2 (redoing the Bazel scripts to accomodate that layout change would be relatively time consuming...)
-
+      run:  g++ -g -std=c++14 -Wall -Wextra -Wno-sign-compare -o bld.out applib/*.cpp building.cpp
     - name: clang tidy build
-      run: clang++ -g -std=c++14 -Wall -Wextra -Wno-sign-compare applib/*.cpp building.cpp
+      run: clang++ -g -std=c++14 -Wall -Wextra -Wno-sign-compare applib/*.cpp building.cpp  
+    - name: Install Valgrind
+      run:  sudo apt update;
+            sudo apt install -y valgrind
+    - name: run it
+      run: valgrind --leak-check=full --errors-for-leak-kinds=definite --track-origins=yes --error-exitcode=3 ./bld.out
 
   Run_Test_1:
     needs: build
@@ -65,7 +46,8 @@ jobs:
     - name: Install Bazel
       run: sudo npm install -g @bazel/bazelisk
     - name: Install Valgrind
-      run:  sudo apt install -y valgrind
+      run:  sudo apt update;
+            sudo apt install -y valgrind
     - uses: actions/checkout@v1
     - name: Run Test
       run:  bazel test --cxxopt=-std=c++14 --verbose_failures --run_under='/usr/bin/valgrind --leak-check=full --errors-for-leak-kinds=definite --error-exitcode=3' --test_output=all //Tests:APP_test
@@ -84,7 +66,8 @@ jobs:
     - name: Install Bazel
       run: sudo npm install -g @bazel/bazelisk
     - name: Install Valgrind
-      run:  sudo apt install -y valgrind
+      run:  sudo apt update;
+            sudo apt install -y valgrind
     - uses: actions/checkout@v1
     - name: Run Test
       run:  bazel test --cxxopt=-std=c++14 --verbose_failures --run_under='/usr/bin/valgrind --leak-check=full --errors-for-leak-kinds=definite --error-exitcode=3' --test_output=all //Tests:APP_test_2
@@ -103,7 +86,8 @@ jobs:
     - name: Install Bazel
       run: sudo npm install -g @bazel/bazelisk
     - name: Install Valgrind
-      run:  sudo apt install -y valgrind
+      run:  sudo apt update;
+            sudo apt install -y valgrind
     - uses: actions/checkout@v1
     - name: Run Test
       run:  bazel test --cxxopt=-std=c++14 --verbose_failures --run_under='/usr/bin/valgrind --leak-check=full --errors-for-leak-kinds=definite --error-exitcode=3' --test_output=all //Tests:APP_test_3
@@ -122,7 +106,8 @@ jobs:
     - name: Install Bazel
       run: sudo npm install -g @bazel/bazelisk
     - name: Install Valgrind
-      run:  sudo apt install -y valgrind
+      run:  sudo apt update;
+            sudo apt install -y valgrind
     - uses: actions/checkout@v1
     - name: Run Test
       run:  bazel test --cxxopt=-std=c++14 --verbose_failures --run_under='/usr/bin/valgrind --leak-check=full --errors-for-leak-kinds=definite --error-exitcode=3' --test_output=all //Tests:APP_test_4
@@ -141,7 +126,8 @@ jobs:
     - name: Install Bazel
       run: sudo npm install -g @bazel/bazelisk
     - name: Install Valgrind
-      run:  sudo apt install -y valgrind
+      run:  sudo apt update;
+            sudo apt install -y valgrind
     - uses: actions/checkout@v1
     - name: Run Test
       run:  bazel test --cxxopt=-std=c++14 --verbose_failures --run_under='/usr/bin/valgrind --leak-check=full --errors-for-leak-kinds=definite --error-exitcode=3' --test_output=all //Tests:APP_test_5
@@ -160,7 +146,8 @@ jobs:
     - name: Install Bazel
       run: sudo npm install -g @bazel/bazelisk
     - name: Install Valgrind
-      run:  sudo apt install -y valgrind
+      run:  sudo apt update;
+            sudo apt install -y valgrind
     - uses: actions/checkout@v1
     - name: Run Test
       run:  bazel test --cxxopt=-std=c++14 --verbose_failures --run_under='/usr/bin/valgrind --leak-check=full --errors-for-leak-kinds=definite --error-exitcode=3' --test_output=all //Tests:APP_test_6
