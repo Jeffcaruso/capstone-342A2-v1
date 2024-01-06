@@ -1,9 +1,9 @@
 name: GTest
 on:
   push:
-    branches: [ main, StudentCodeTesting, SCT2  ]
+    branches: [ starter, solution ]
   pull_request:
-    branches: [ main, StudentCodeTesting, SCT2  ]
+    branches: [ starter, solution ]
   workflow_dispatch:
 
 jobs:
@@ -159,5 +159,4 @@ jobs:
 
       # additional note, user code expected in: applib
 
-      
       
