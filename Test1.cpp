@@ -7,7 +7,7 @@
 //============================================================================
 
 #include <gtest/gtest.h>
-#include "applib/largenum.h"
+#include "largenum.h"
 
 #include <iostream>
 #include <sstream>

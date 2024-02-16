@@ -1,7 +1,6 @@
 //============================================================================
 // Name        : Test1
-// Test Desc.  : Test that the methods to determine empty are correct
-//				 	(coverage for old test 1 method) the 'student' code
+// Test Desc.  : Trivial testing - largely to just slightly support build validation
 // Author      : Jeffrey Caruso
 // Date    	   : Fall 2023
 //============================================================================
