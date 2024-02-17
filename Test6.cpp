@@ -7,7 +7,7 @@
 //============================================================================
 
 #include <gtest/gtest.h>
-#include "applib/largenum.h"
+#include "largenum.h"
 
 #include <iostream>
 #include <sstream>
@@ -15,7 +15,7 @@
 using namespace std;
 
 
-TEST(Test6one, CheckPrefixAndPostfix)
+TEST(Test6, CheckPrefixAndPostfix)
 {
 	LargeNum num0(10);
 
@@ -54,7 +54,7 @@ TEST(Test6one, CheckPrefixAndPostfix)
 
 }
 
-TEST(Test6two, CheckPrefixIntoAndOutOfNegative)
+TEST(Test6, CheckPrefixIntoAndOutOfNegative)
 {
 	//specifically prefix making # negative
 	LargeNum num1(1);

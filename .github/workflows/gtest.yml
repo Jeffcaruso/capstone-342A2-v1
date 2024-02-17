@@ -7,6 +7,8 @@ on:
 permissions:
   contents: write
 
+#if you end up adding code files for largenum beyond largenum.cpp, make sure to add it in here to the g++ sections...
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -36,3 +38,74 @@ jobs:
       run: g++ largenum.cpp Test1.cpp -lgtest -lgtest_main -pthread
     - name: Run the project
       run: ./a.out
+
+  test2:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Run Install script for GTest
+      run:  ./.github/workflows/install-googletest.sh
+    - name: remove un-needed gtest files
+      run:  rm -rf googletest
+    - name: Build the project
+      run: g++ largenum.cpp Test2.cpp -lgtest -lgtest_main -pthread
+    - name: Run the project
+      run: ./a.out
+
+  test3:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Run Install script for GTest
+      run:  ./.github/workflows/install-googletest.sh
+    - name: remove un-needed gtest files
+      run:  rm -rf googletest
+    - name: Build the project
+      run: g++ largenum.cpp Test3.cpp -lgtest -lgtest_main -pthread
+    - name: Run the project
+      run: ./a.out
+
+  test4:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Run Install script for GTest
+      run:  ./.github/workflows/install-googletest.sh
+    - name: remove un-needed gtest files
+      run:  rm -rf googletest
+    - name: Build the project
+      run: g++ largenum.cpp Test4.cpp -lgtest -lgtest_main -pthread
+    - name: Run the project
+      run: ./a.out
+
+  test5:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Run Install script for GTest
+      run:  ./.github/workflows/install-googletest.sh
+    - name: remove un-needed gtest files
+      run:  rm -rf googletest
+    - name: Build the project
+      run: g++ largenum.cpp Test5.cpp -lgtest -lgtest_main -pthread
+    - name: Run the project
+      run: ./a.out
+
+  test6:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Run Install script for GTest
+      run:  ./.github/workflows/install-googletest.sh
+    - name: remove un-needed gtest files
+      run:  rm -rf googletest
+    - name: Build the project
+      run: g++ largenum.cpp Test6.cpp -lgtest -lgtest_main -pthread
+    - name: Run the project
+      run: ./a.out
+

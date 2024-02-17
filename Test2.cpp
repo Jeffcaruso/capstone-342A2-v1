@@ -7,7 +7,7 @@
 //============================================================================
 
 #include <gtest/gtest.h>
-#include "applib/largenum.h"
+#include "largenum.h"
 
 #include <iostream>
 #include <sstream>
@@ -19,7 +19,7 @@ using namespace std;
 // for c strings, use EXPECT_STREQ (or STRNE)
 // http://google.github.io/googletest/reference/assertions.html
 
-TEST(Test2one, CheckEqualAndNE)
+TEST(Test2, CheckEqualAndNE)
 {
 	//Testing Equal and Not Equal with operator overloads
 	//is true that 99 == 99
@@ -28,7 +28,7 @@ TEST(Test2one, CheckEqualAndNE)
 	EXPECT_TRUE(LargeNum(99) != LargeNum(100));  	
 }
 
-TEST(TEST2two, CheckGTEandLTE)
+TEST(Test2, CheckGTEandLTE)
 {
 	//Testing Greater Than or Equal and Less Than or Equal with operator overloads	
 	//is true that 105 >= 100
@@ -37,7 +37,7 @@ TEST(TEST2two, CheckGTEandLTE)
 	EXPECT_TRUE(LargeNum(100) <= LargeNum(105));
 }
 
-TEST(Test2three, CheckGTandLT)
+TEST(Test2, CheckGTandLT)
 {
 	//Testing Greater Than and Less Than with operator overloads	
 
