@@ -1,9 +1,9 @@
 name: GTest
 on:
   push:
-    branches: [ starter, solution ]
+    branches: [ Starter, Solution ]
   pull_request:
-    branches: [ starter, solution ]
+    branches: [ Starter, Solution ]
 permissions:
   contents: write
 
