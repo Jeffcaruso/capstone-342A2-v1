@@ -7,8 +7,6 @@ on:
 permissions:
   contents: write
 
-#if you end up adding code files for largenum beyond largenum.cpp, make sure to add it in here to the g++ sections...
-
 jobs:
   build:
     runs-on: ubuntu-latest
