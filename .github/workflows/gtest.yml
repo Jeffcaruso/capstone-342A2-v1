@@ -1,9 +1,9 @@
 name: GTest
 on:
   push:
-    branches: [ starter, solution ]
+    branches: [ Starter, Solution ]
   pull_request:
-    branches: [ starter, solution ]
+    branches: [ Starter, Solution ]
 permissions:
   contents: write
 
@@ -20,93 +20,119 @@ jobs:
       run:  ./.github/workflows/install-googletest.sh
     - name: remove un-needed gtest files
       run:  rm -rf googletest
+    - name: Install Valgrind
+      run: sudo apt install -y valgrind
     - name: Build the project
-      run: g++ largenum.cpp Test0.cpp -lgtest -lgtest_main -pthread
+      run: g++ largenum.cpp Test0.cpp -g -lgtest -lgtest_main -pthread
     - name: Run the project
-      run: ./a.out
+      run: valgrind ./a.out
 
   test1:
     needs: build
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+    - name: prep by removal
+      run: rm -f a.out
     - name: Run Install script for GTest
       run:  ./.github/workflows/install-googletest.sh
     - name: remove un-needed gtest files
       run:  rm -rf googletest
+    - name: Install Valgrind
+      run: sudo apt install -y valgrind
     - name: Build the project
-      run: g++ largenum.cpp Test1.cpp -lgtest -lgtest_main -pthread
+      run: g++ largenum.cpp Test1.cpp -g -lgtest -lgtest_main -pthread
     - name: Run the project
-      run: ./a.out
+      run: valgrind ./a.out
 
   test2:
     needs: build
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+    - name: prep by removal
+      run: rm -f a.out
     - name: Run Install script for GTest
       run:  ./.github/workflows/install-googletest.sh
     - name: remove un-needed gtest files
       run:  rm -rf googletest
+    - name: Install Valgrind
+      run: sudo apt install -y valgrind
     - name: Build the project
-      run: g++ largenum.cpp Test2.cpp -lgtest -lgtest_main -pthread
+      run: g++ largenum.cpp Test2.cpp -g -lgtest -lgtest_main -pthread
     - name: Run the project
-      run: ./a.out
+      run: valgrind ./a.out
 
   test3:
     needs: build
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+    - name: prep by removal
+      run: rm -f a.out
     - name: Run Install script for GTest
       run:  ./.github/workflows/install-googletest.sh
     - name: remove un-needed gtest files
       run:  rm -rf googletest
+    - name: Install Valgrind
+      run: sudo apt install -y valgrind
     - name: Build the project
-      run: g++ largenum.cpp Test3.cpp -lgtest -lgtest_main -pthread
+      run: g++ largenum.cpp Test3.cpp -g -lgtest -lgtest_main -pthread
     - name: Run the project
-      run: ./a.out
+      run: valgrind ./a.out
 
   test4:
     needs: build
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+    - name: prep by removal
+      run: rm -f a.out
     - name: Run Install script for GTest
       run:  ./.github/workflows/install-googletest.sh
     - name: remove un-needed gtest files
       run:  rm -rf googletest
+    - name: Install Valgrind
+      run: sudo apt install -y valgrind
     - name: Build the project
-      run: g++ largenum.cpp Test4.cpp -lgtest -lgtest_main -pthread
+      run: g++ largenum.cpp Test4.cpp -g -lgtest -lgtest_main -pthread
     - name: Run the project
-      run: ./a.out
+      run: valgrind ./a.out
 
   test5:
     needs: build
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+    - name: prep by removal
+      run: rm -f a.out
     - name: Run Install script for GTest
       run:  ./.github/workflows/install-googletest.sh
     - name: remove un-needed gtest files
       run:  rm -rf googletest
+    - name: Install Valgrind
+      run: sudo apt install -y valgrind
     - name: Build the project
-      run: g++ largenum.cpp Test5.cpp -lgtest -lgtest_main -pthread
+      run: g++ largenum.cpp Test5.cpp -g -lgtest -lgtest_main -pthread
     - name: Run the project
-      run: ./a.out
+      run: valgrind ./a.out
 
   test6:
     needs: build
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+    - name: prep by removal
+      run: rm -f a.out
     - name: Run Install script for GTest
       run:  ./.github/workflows/install-googletest.sh
     - name: remove un-needed gtest files
       run:  rm -rf googletest
+    - name: Install Valgrind
+      run: sudo apt install -y valgrind
     - name: Build the project
-      run: g++ largenum.cpp Test6.cpp -lgtest -lgtest_main -pthread
+      run: g++ largenum.cpp Test6.cpp -g -lgtest -lgtest_main -pthread
     - name: Run the project
-      run: ./a.out
+      run: valgrind ./a.out
 
 
