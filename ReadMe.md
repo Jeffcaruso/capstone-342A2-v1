@@ -4,7 +4,3 @@
 
 ## reference:
  - https://github.com/pisan342/ass2-largenum-starter
-
-### other note
-- Transitioning to new setup (2/16/24)
- 
