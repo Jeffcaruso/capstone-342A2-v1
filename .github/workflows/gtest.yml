@@ -134,5 +134,3 @@ jobs:
       run: g++ largenum.cpp Test6.cpp -g -lgtest -lgtest_main -pthread
     - name: Run the project
       run: valgrind ./a.out
-
-
